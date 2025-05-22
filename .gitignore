@@ -1,0 +1,9 @@
+# .gitignore
+bin/
+obj/
+.vs/
+dockerexample-api
+dockerexample-db
+*.user
+*.suo
+*.vs/
