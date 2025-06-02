@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetesexample
+  namespace: kubernetesexample
+  labels:
+    app: kubernetesexample
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kubernetesexample
+  template:
+    metadata:
+      labels:
+        app: kubernetesexample
+    spec:
+      containers:
+      - name: kubernetesexample
+        image: kubernetesregistryedson.azurecr.io/kubernetesexample:v1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: "Host=postgres-service.kubernetesexample.svc.cluster.local;Port=5432;Database=taskdb;Username=postgres;Password=postgres"
+        readinessProbe:
+          httpGet:
+            path: /api/tasks
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      imagePullSecrets:
+      - name: acr-secret
